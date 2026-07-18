@@ -1,0 +1,12 @@
+# nixpacks.toml
+# Railway utilise Nixpacks pour construire l'image de déploiement.
+# `better-sqlite3` est un module natif (compilé en C++) : sans cette
+# configuration, le build échoue souvent avec une erreur "python not
+# found" ou "gyp ERR!" car l'environnement par défaut de Nixpacks pour
+# un projet Node n'inclut pas toujours Python/gcc/make nécessaires à
+# node-gyp pour compiler le module.
+
+providers = ["node"]
+
+[phases.setup]
+nixPkgs = ["...", "python311", "gcc", "gnumake"]

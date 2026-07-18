@@ -1,0 +1,4 @@
+numero_table,nom,prenom,decision,moyenne,mention,serie,etablissement,province,region
+001234,OUEDRAOGO,Awa,non_admis,7.2,,,École Primaire Publique de Zogona,Kadiogo,Kadiogo
+001235,KABORE,Issa,second_tour,8.6,,,École Primaire Publique de Zogona,Kadiogo,Kadiogo
+210987,ZONGO,Aminata,admis,14.6,Bien,D,Lycée Philippe Zinda Kaboré,Kadiogo,Kadiogo
