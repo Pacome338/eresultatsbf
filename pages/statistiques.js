@@ -24,8 +24,7 @@ export async function getServerSideProps() {
   const sessions = [...new Set(regionales.map((r) => r.session))].sort().reverse();
 
   // Pour chaque session : grille des 17 régions (lignes "ensemble de la
-  // région", zone vide ou ne commençant pas par "Province du") + détail
-  // provincial séparé (zone commençant par "Province du").
+  // région") + détail provincial séparé (zone commençant par "Province du").
   const grillesParSession = sessions.map((session) => {
     const lignesSession = regionales.filter((r) => r.session === session);
 
@@ -76,25 +75,27 @@ export default function Statistiques({ nationales, grillesParSession }) {
           {nationales.length === 0 ? (
             <p style={{ color: 'var(--texte-clair)' }}>Aucune donnée nationale enregistrée pour l&apos;instant.</p>
           ) : (
-            <table className="tableau-simple">
-              <thead>
-                <tr><th>Examen</th><th>Session</th><th>Candidats</th><th>Admis</th><th>Taux</th></tr>
-              </thead>
-              <tbody>
-                {nationales.map((s) => (
-                  <tr key={s.id}>
-                    <td>{s.examen}</td>
-                    <td>{s.session}</td>
-                    <td>{formatNombre(s.candidats)}</td>
-                    <td>{formatNombre(s.admis)}</td>
-                    <td>
-                      <strong>{formatTaux(s.taux)}</strong>
-                      {s.note && <div style={{ fontSize: '0.72rem', color: 'var(--texte-clair)', fontWeight: 400 }}>{s.note}</div>}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div style={{ overflowX: 'auto' }}>
+              <table className="tableau-simple">
+                <thead>
+                  <tr><th>Examen</th><th>Session</th><th>Candidats</th><th>Admis</th><th>Taux</th></tr>
+                </thead>
+                <tbody>
+                  {nationales.map((s) => (
+                    <tr key={s.id}>
+                      <td data-label="Examen">{s.examen}</td>
+                      <td data-label="Session">{s.session}</td>
+                      <td data-label="Candidats">{formatNombre(s.candidats)}</td>
+                      <td data-label="Admis">{formatNombre(s.admis)}</td>
+                      <td data-label="Taux">
+                        <strong>{formatTaux(s.taux)}</strong>
+                        {s.note && <div style={{ fontSize: '0.72rem', color: 'var(--texte-clair)', fontWeight: 400 }}>{s.note}</div>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
 
@@ -104,19 +105,23 @@ export default function Statistiques({ nationales, grillesParSession }) {
             <p style={{ fontSize: '0.85rem', color: 'var(--texte-clair)', marginTop: -8 }}>
               Les 17 régions, avec le taux de réussite par examen quand la donnée est disponible.
             </p>
+
+            {/* Sur mobile (< 640px), ce tableau se transforme automatiquement
+                en petites cartes empilées grâce à .tableau-responsive-cards
+                (voir globals.css) — plus besoin de faire défiler horizontalement. */}
             <div style={{ overflowX: 'auto' }}>
-              <table className="tableau-simple">
+              <table className="tableau-simple tableau-responsive-cards">
                 <thead>
                   <tr><th>Région</th><th>Zone</th><th>CEP</th><th>BEPC</th><th>BAC</th></tr>
                 </thead>
                 <tbody>
                   {grille.map((r) => (
                     <tr key={r.region}>
-                      <td>{r.region}</td>
-                      <td style={{ color: 'var(--texte-clair)' }}>{r.zone || '—'}</td>
-                      <td>{formatTaux(r.CEP)}</td>
-                      <td>{formatTaux(r.BEPC)}</td>
-                      <td>{formatTaux(r.BAC)}</td>
+                      <td data-label="Région"><strong>{r.region}</strong></td>
+                      <td data-label="Zone" style={{ color: 'var(--texte-clair)' }}>{r.zone || '—'}</td>
+                      <td data-label="CEP">{formatTaux(r.CEP)}</td>
+                      <td data-label="BEPC">{formatTaux(r.BEPC)}</td>
+                      <td data-label="BAC">{formatTaux(r.BAC)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -126,21 +131,23 @@ export default function Statistiques({ nationales, grillesParSession }) {
             {detailProvincial.length > 0 && (
               <>
                 <h3 style={{ fontSize: '0.92rem', marginTop: 20 }}>Détail provincial disponible</h3>
-                <table className="tableau-simple">
-                  <thead>
-                    <tr><th>Examen</th><th>Région</th><th>Zone</th><th>Taux</th></tr>
-                  </thead>
-                  <tbody>
-                    {detailProvincial.map((p) => (
-                      <tr key={p.id}>
-                        <td>{p.examen}</td>
-                        <td>{p.region}</td>
-                        <td>{p.zone}</td>
-                        <td><strong>{formatTaux(p.taux)}</strong></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div style={{ overflowX: 'auto' }}>
+                  <table className="tableau-simple tableau-responsive-cards">
+                    <thead>
+                      <tr><th>Examen</th><th>Région</th><th>Zone</th><th>Taux</th></tr>
+                    </thead>
+                    <tbody>
+                      {detailProvincial.map((p) => (
+                        <tr key={p.id}>
+                          <td data-label="Examen">{p.examen}</td>
+                          <td data-label="Région">{p.region}</td>
+                          <td data-label="Zone">{p.zone}</td>
+                          <td data-label="Taux"><strong>{formatTaux(p.taux)}</strong></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </>
             )}
           </div>

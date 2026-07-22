@@ -758,3 +758,47 @@ table.tableau-simple th {
 .avis-corps .btn {
   margin-top: 6px;
 }
+/* --- Tableaux responsives : cartes empilées sur petit écran --- */
+
+@media (max-width: 640px) {
+  .tableau-responsive-cards thead {
+    display: none;
+  }
+
+  .tableau-responsive-cards, .tableau-responsive-cards tbody, .tableau-responsive-cards tr, .tableau-responsive-cards td {
+    display: block;
+    width: 100%;
+  }
+
+  .tableau-responsive-cards tr {
+    margin-bottom: 12px;
+    border: 1px solid var(--bordure);
+    border-radius: 10px;
+    padding: 10px 14px;
+    background: var(--blanc);
+  }
+
+  .tableau-responsive-cards td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--bordure);
+    text-align: right;
+  }
+
+  .tableau-responsive-cards td:last-child {
+    border-bottom: none;
+  }
+
+  .tableau-responsive-cards td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--texte-clair);
+    text-align: left;
+  }
+}
